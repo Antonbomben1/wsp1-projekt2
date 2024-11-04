@@ -7,6 +7,18 @@
     <link rel="stylesheet" type="text/css" href="/style.css?<%=Time.now.to_i%>">
 </head>
 <body>
+
+<ul>
+<% @todo.each do |todo| %>
+  <li><a href="/todo/<%= todo['id']%>"><%= todo['name']%></a>
+  <form action="/todo/<%=todo["id"]%>/delete" method="post">
+<input type="submit" value= "delete"></form>
+<form action="/todo/<%=todo["id"]%>/edit" method="get">
+<input type="submit" value= "edit"></form>
+</li>
+<% end %>
+</ul>
+
   <img src="/img/glhf.png">
 </body>
 </html>
