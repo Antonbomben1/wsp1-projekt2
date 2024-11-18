@@ -5,3 +5,27 @@ body {
   font-size: x-large;
   margin: 1em;
 }
+
+header {
+  background-color: #333;
+  color: white;
+  padding: 1em;
+  text-align: center;
+  border-radius: 5px;
+  margin: 1em;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.completed {
+  text-decoration: line-through;
+}
+
+
+.list {
+  background-color: aqua;
+  padding: 1em;
+  border-radius: 5px;
+  margin: 1em;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 45%;
+}

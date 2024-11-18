@@ -7,18 +7,38 @@
     <link rel="stylesheet" type="text/css" href="/style.css?<%=Time.now.to_i%>">
 </head>
 <body>
+<header>
+    <h1>Todo Lista</h1>
+</header>
+
+<form action="/todo" method="post">
+    <input type="text" name="name" placeholder="New Task" required>
+    <input type="text" name="description" placeholder="Description" required>
+    <input type="submit" value="Add">
+</form>
 
 <ul>
-<% @todo.each do |todo| %>
-  <li><a href="/todo/<%= todo['id']%>"><%= todo['name']%></a>
-  <form action="/todo/<%=todo["id"]%>/delete" method="post">
-<input type="submit" value= "delete"></form>
-<form action="/todo/<%=todo["id"]%>/edit" method="get">
-<input type="submit" value= "edit"></form>
-</li>
-<% end %>
+    <% @todo.each do |todo| %>
+        <li class= "list">
+            <% if todo['done'] == 1%>
+                <h2 class= "completed"><%= todo['name'] %></h2> 
+                <p> <%= todo['description'] %> </p>
+                <form action="/todo/<%= todo['id'] %>/<%=todo['done']%>" method="post" style="display:inline;">
+                <input type="submit" value="undo">
+            </form>
+            <% else %>
+                <h2><%= todo['name'] %> </h2>
+                <p> <%= todo['description'] %> </p>
+                <form action="/todo/<%= todo['id'] %>/<%=todo['done']%>" method="post" style="display:inline;">
+                <input type="submit" value="Done">
+            </form>
+            <% end %>
+            <form action="/todo/<%= todo['id'] %>/delete" method="post" style="display:inline;">
+                <input type="submit" value="Delete">
+            </form>
+        </li>
+    <% end %>
 </ul>
-
-  <img src="/img/glhf.png">
+  </h1>
 </body>
 </html>
