@@ -36,7 +36,15 @@ class Seeder
 
     password_hashed = BCrypt::Password.create("admin")
     db.execute('INSERT INTO users (username, password) VALUES ("admin", ?)', [password_hashed])
-  end
+  
+
+  password_hashed = BCrypt::Password.create("lösen1")
+  db.execute('INSERT INTO users (username, password) VALUES ("u1", ?)', [password_hashed])
+
+
+  password_hashed = BCrypt::Password.create("lösen2")
+  db.execute('INSERT INTO users (username, password) VALUES ("u2", ?)', [password_hashed])
+end
 
   def self.db
     return @db if @db
