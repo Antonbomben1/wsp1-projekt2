@@ -1,0 +1,12 @@
+<h1>Manage Users</h1>
+<ul>
+  <% @users.each do |user| %>
+    <li>
+      <form action="/admin/users/<%= user['id'] %>" method="get">
+        <button type="submit"><%= user['username'] %>'s Todos</button>
+      </form>
+    </li>
+  <% end %>
+</ul>
+
+<a href="/">Back to Home</a>

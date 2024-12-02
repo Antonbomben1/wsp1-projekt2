@@ -9,38 +9,44 @@
 <body>
 <header>
     <h1>Todo Lista</h1>
+    <form action="/logout" method="post" class="logout-form">
+    <button type="submit" class="logout-button">Log Out</button>
+</form>
 </header>
 
-<form action="/todo" method="post">
-    <input type="text" name="name" placeholder="New Task" required>
-    <input type="text" name="description" placeholder="Description" required>
-    <input type="submit" value="Add">
+<form action="/todo" method="post" class="todo-form">
+    <input type="text" name="name" placeholder="New Task" required class="todo-input">
+    <input type="text" name="description" placeholder="Description" required class="todo-input">
+    <input type="submit" value="Add" class="todo-submit">
 </form>
 
-<form action="/logout" method="post" style="display: inline;">
-    <button type="submit">Log Out</button>
-</form>
+
+
 
 <ul>
-    <% @todo.each do |todo| %>
-        <li class= "list">
+    <% @todos.each do |todo| %>
             <% if todo['done'] == 1%>
+            <li class = "list_completed">
                 <h2 class= "completed"><%= todo['name'] %></h2> 
                 <p> <%= todo['description'] %> </p>
                 <form action="/todo/<%= todo['id'] %>/<%=todo['done']%>" method="post" style="display:inline;">
                 <input type="submit" value="undo">
             </form>
+            <form action="/todo/<%= todo['id'] %>/delete" method="post" style="display:inline;">
+            <input type="submit" value="Delete">
+            </li>
             <% else %>
+            <li class = "list_uncompleted">
                 <h2><%= todo['name'] %> </h2>
                 <p> <%= todo['description'] %> </p>
                 <form action="/todo/<%= todo['id'] %>/<%=todo['done']%>" method="post" style="display:inline;">
                 <input type="submit" value="Done">
             </form>
-            <% end %>
             <form action="/todo/<%= todo['id'] %>/delete" method="post" style="display:inline;">
-                <input type="submit" value="Delete">
+            <input type="submit" value="Delete">
+            </li>
+            <% end %>
             </form>
-        </li>
     <% end %>
 </ul>
   </h1>

@@ -18,7 +18,11 @@ class App < Sinatra::Base
     end
 
     get '/login' do
-        erb :login
+        if !session[:user]
+            erb :login
+        else
+            redirect '/'
+            end
     end
 
     post '/login' do
@@ -49,31 +53,30 @@ class App < Sinatra::Base
       end
   end
 
-#fler av de två get och post
     get '/' do
-        @todo = db.execute("SELECT * FROM todo")
+        @todos = db.execute("SELECT * FROM todos WHERE user_id = ?", [session[:user]["id"]])
         erb :index
       end
     
     post '/todo' do
         name = params[:name]
         description = params[:description]
-        db.execute("INSERT INTO todo (name, description) VALUES (?,?)", [name, description])
+        db.execute("INSERT INTO todos (name, user_id, description) VALUES (?, ?, ?)", [name, session[:user]["id"], description])
         redirect '/'
       end
       
     
     post '/todo/:id/delete' do
-        db.execute("DELETE FROM todo WHERE id = ?", [params[:id]])
+        db.execute("DELETE FROM todos WHERE id = ?", [params[:id]])
         redirect '/'
       end
 
 
     post '/todo/:id/:done' do |id, done|
         if done == "1"
-            db.execute("UPDATE todo SET done = 0 WHERE id = ?", [params[:id]])
+            db.execute("UPDATE todos SET done = 0 WHERE id = ?", [params[:id]])
         elsif done == "0"
-            db.execute("UPDATE todo SET done = 1 WHERE id = ?", [params[:id]])
+            db.execute("UPDATE todos SET done = 1 WHERE id = ?", [params[:id]])
         end
         redirect '/'
       end

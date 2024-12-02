@@ -21,11 +21,157 @@ header {
 }
 
 
-.list {
-  background-color: aqua;
+.list_completed {
+  background-color: lightgreen;
   padding: 1em;
   border-radius: 5px;
   margin: 1em;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 45%;
+}
+/* Form Styling */
+.todo-form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  padding: 0.8rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 300px;  /* Limits the width to make it more compact */
+  margin: auto;  /* Centers the form horizontally */
+}
+
+.todo-input {
+  padding: 0.6rem;
+  margin: 0.4rem 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;  /* Smaller text */
+  outline: none;
+}
+
+.todo-input:focus {
+  border-color: #2575fc;
+  box-shadow: 0 0 3px rgba(37, 117, 252, 0.5);
+}
+
+.todo-submit {
+  padding: 0.6rem;
+  background-color: #2575fc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;  /* Smaller text */
+  margin-top: 0.6rem;
+}
+
+.todo-submit:hover {
+  background-color: #1f62d1;
+}
+
+/* Log Out Button Styling */
+.logout-form {
+  display: inline;
+  margin-top: 1rem;
+}
+
+.logout-button {
+  padding: 0.6rem;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;  /* Smaller text */
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #d32f2f;
+}
+
+
+.list_uncompleted {
+  background-color: lightcoral;
+  padding: 1em;
+  border-radius: 5px;
+  margin: 1em;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 45%;
+}
+
+
+
+/* Styling for the login page */
+.login-page {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+}
+
+/* Login container styles */
+.login-container {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+/* Login title */
+.login-title {
+    color: #333;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Login form styling */
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Input fields styling */
+.login-input {
+    padding: 0.8rem;
+    margin: 0.6rem 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.login-input.username, .login-input.password {
+    font-size: 1rem;
+}
+
+/* Button styling */
+.login-button {
+    padding: 0.8rem;
+    margin-top: 1rem;
+    background-color: #2575fc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.login-button:hover {
+    background-color: #1f62d1;
+}
+
+/* Error message styling */
+.error-message {
+    color: red;
+    font-size: 1rem;
+    margin-bottom: 1rem;
 }
