@@ -17,6 +17,15 @@
 <form action="/todo" method="post" class="todo-form">
     <input type="text" name="name" placeholder="New Task" required class="todo-input">
     <input type="text" name="description" placeholder="Description" required class="todo-input">
+    <select name="folder_id">
+  <option value="">No Folder</option>
+  <% db.execute("SELECT * FROM folders").each do |folder| %>
+    <option value="<%= folder['id'] %>"><%= folder['name'] %></option>
+  <% end %>
+</select>
+
+    <button id="create-folder-btn">Create New Folder</button>
+
     <input type="submit" value="Add" class="todo-submit">
 </form>
 

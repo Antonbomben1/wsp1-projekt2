@@ -1,0 +1,10 @@
+<h2>All Folders</h2>
+<ul>
+  <% @folders.each do |folder| %>
+    <li>
+      <a href="/folders/<%= folder['id'] %>"><%= folder['name'] %></a>
+    </li>
+  <% end %>
+</ul>
+
+<a href="/folders/new">Create New Folder</a>

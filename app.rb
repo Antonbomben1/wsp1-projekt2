@@ -1,6 +1,9 @@
 
 require 'sinatra'
 require 'securerandom'
+require 'sqlite3'
+require 'json'
+require './db/seeder'
 class App < Sinatra::Base
  
     def db
@@ -80,5 +83,59 @@ class App < Sinatra::Base
         end
         redirect '/'
       end
+      
+        # Route to display all folders
+    get '/folders' do
+    @folders = db.execute("SELECT * FROM folders")
+    erb :folders_list  # Display the folders list
+    end
+
+    # Route to display the form to create a folder
+    get '/folders/new' do
+    erb :new_folder  # Form to create a new folder
+    end
+
+    # Route to create a folder
+    post '/folders' do
+    folder_name = params[:folder_name]
+    db.execute("INSERT INTO folders (name) VALUES (?)", [folder_name])
+    redirect '/folders'  # Redirect back to the list of folders
+    end
+
+    # Route to display tasks for a specific folder
+    get '/folders/:id' do
+    folder_id = params[:id].to_i
+    @folder = db.execute("SELECT * FROM folders WHERE id = ?", [folder_id]).first
+    @tasks = db.execute("SELECT * FROM todos WHERE folder_id = ?", [folder_id])
+    erb :folder_tasks  # Show the tasks within this folder
+    end
+    get '/' do
+        @folders = db.execute("SELECT * FROM folders")
+        @todos = db.execute("SELECT * FROM todos WHERE user_id = ?", [session[:user]["id"]])
+        erb :index
+     end
+
+    post '/todo' do
+        name = params[:name]
+        description = params[:description]
+        folder_id = params[:folder_id]
+      
+        db.execute("INSERT INTO todos (name, user_id, description, folder_id) VALUES (?, ?, ?, ?)", 
+                   [name, session[:user]["id"], description, folder_id])
+        redirect '/'
+      end
+            
+      post '/create_folder' do
+        folder_name = params[:folder_name]
+        db.execute('INSERT INTO folders (name) VALUES (?)', [folder_name])
+        redirect '/'  # Redirect back to the homepage after creating the folder
+      end
+      
+      get '/folders/new' do
+        erb :new_folder
+      end
+      
+     
+
     
 end

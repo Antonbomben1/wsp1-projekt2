@@ -1,0 +1,14 @@
+<h2>Tasks in Folder: <%= @folder['name'] %></h2>
+
+<ul>
+  <% @tasks.each do |task| %>
+    <li>
+      <strong><%= task['name'] %></strong> - <%= task['description'] %>
+      <% if task['done'] == 1 %>
+        <span>(Done)</span>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+
+<a href="/folders">Back to Folders</a>

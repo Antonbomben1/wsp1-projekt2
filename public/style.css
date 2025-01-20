@@ -175,3 +175,25 @@ header {
     font-size: 1rem;
     margin-bottom: 1rem;
 }
+
+  #folder-dropdown {
+    width: 200px;
+    height: 30px;
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+
+  #create-folder-btn {
+    width: 200px;
+    height: 30px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  #create-folder-btn:hover {
+    background-color: #3e8e41;
+  }
