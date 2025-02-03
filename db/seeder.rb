@@ -14,6 +14,7 @@ class Seeder
   def self.create_tables
     db.execute('CREATE TABLE folders (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
       name TEXT UNIQUE NOT NULL
     )')
 
@@ -50,8 +51,13 @@ class Seeder
     db.execute('INSERT INTO users (username, password) VALUES ("u2", ?)', [password_hashed])
 
     # Insert sample todos
-    db.execute('INSERT INTO todos (name, user_id, description, folder_id) VALUES ("Buy groceries", 1, "Milk, eggs, butter", 1)')
-    db.execute('INSERT INTO todos (name, user_id, description, folder_id) VALUES ("Plan itinerary", 1, "Details for the trip", 3)')
+    db.execute('INSERT INTO todos (name, user_id, description, folder_id) VALUES ("Buy groceries", 1, "Milk, eggs, butter", 4)')
+    db.execute('INSERT INTO todos (name, user_id, description, folder_id) VALUES ("Plan itinerary", 1, "Details for the trip", 4)')
+  
+    #lägg in 3 test-folders
+    db.execute('INSERT INTO folders (name, user_id) VALUES ("Test Folder 1", 1)')
+    db.execute('INSERT INTO folders (name, user_id) VALUES ("Test Folder 2", 1)')
+    db.execute('INSERT INTO folders (name, user_id) VALUES ("Test Folder 3", 2)')
   end
 
   def self.db

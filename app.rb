@@ -57,7 +57,8 @@ class App < Sinatra::Base
   end
 
     get '/' do
-        @todos = db.execute("SELECT * FROM todos WHERE user_id = ?", [session[:user]["id"]])
+      p session[:user]["id"]
+        @todos = db.execute("SELECT * FROM folders WHERE user_id = ?", [session[:user]["id"]])
         erb :index
       end
     
@@ -127,7 +128,7 @@ class App < Sinatra::Base
             
       post '/create_folder' do
         folder_name = params[:folder_name]
-        db.execute('INSERT INTO folders (name) VALUES (?)', [folder_name])
+        db.execute('INSERT INTO folders (name, folder_id) VALUES (?)', [folder_name])
         redirect '/'  # Redirect back to the homepage after creating the folder
       end
       
