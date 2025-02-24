@@ -8,7 +8,7 @@ class Seeder
   def self.drop_tables
     db.execute('DROP TABLE IF EXISTS todos')
     db.execute('DROP TABLE IF EXISTS users')
-    db.execute('DROP TABLE IF EXISTS folders') # Drop folders table
+    db.execute('DROP TABLE IF EXISTS folders')
   end
 
   def self.create_tables
@@ -38,26 +38,19 @@ class Seeder
   end
 
   def self.populate_tables
-    # Insert unique folder names
-    folders = %w[Work Personal Trip]
-    folders.each do |folder_name|
-      db.execute('INSERT OR IGNORE INTO folders (name) VALUES (?)', [folder_name])
-    end
-
-    # Insert sample users
     password_hashed = BCrypt::Password.create("admin")
     db.execute('INSERT INTO users (username, password) VALUES ("admin", ?)', [password_hashed])
     db.execute('INSERT INTO users (username, password) VALUES ("u1", ?)', [password_hashed])
     db.execute('INSERT INTO users (username, password) VALUES ("u2", ?)', [password_hashed])
 
-    # Insert sample todos
-    db.execute('INSERT INTO todos (name, user_id, description, folder_id) VALUES ("Buy groceries", 1, "Milk, eggs, butter", 4)')
-    db.execute('INSERT INTO todos (name, user_id, description, folder_id) VALUES ("Plan itinerary", 1, "Details for the trip", 4)')
-  
-    #lägg in 3 test-folders
-    db.execute('INSERT INTO folders (name, user_id) VALUES ("Test Folder 1", 1)')
-    db.execute('INSERT INTO folders (name, user_id) VALUES ("Test Folder 2", 1)')
-    db.execute('INSERT INTO folders (name, user_id) VALUES ("Test Folder 3", 2)')
+    # Skapa mappar kopplade till användare
+    db.execute('INSERT INTO folders (name, user_id) VALUES ("Work", 1)')
+    db.execute('INSERT INTO folders (name, user_id) VALUES ("Personal", 2)')
+    db.execute('INSERT INTO folders (name, user_id) VALUES ("Trip", 3)')
+
+    # Skapa uppgifter kopplade till användare och mappar
+    db.execute('INSERT INTO todos (name, user_id, description, folder_id) VALUES ("Buy groceries", 1, "Milk, eggs, butter", 1)')
+    db.execute('INSERT INTO todos (name, user_id, description, folder_id) VALUES ("Plan itinerary", 2, "Details for the trip", 2)')
   end
 
   def self.db
@@ -67,3 +60,6 @@ class Seeder
     @db
   end
 end
+
+# Testa INNER JOIN
+Seeder.seed!

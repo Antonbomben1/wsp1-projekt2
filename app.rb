@@ -58,16 +58,29 @@ class App < Sinatra::Base
 
     get '/' do
       p session[:user]["id"]
-        @todos = db.execute("SELECT * FROM folders WHERE user_id = ?", [session[:user]["id"]])
-        erb :index
+
+      @folders = db.execute("SELECT * FROM folders")
+      p "Anton är lite homosexuell!!!"
+      p @folders
+      @todos = db.execute("SELECT * 
+      FROM todos 
+        INNER JOIN users ON todos.user_id = users.id
+        INNER JOIN folders ON todos.folder_id = folders.id")
+      erb :index
       end
     
-    post '/todo' do
+      post '/todo' do
         name = params[:name]
         description = params[:description]
-        db.execute("INSERT INTO todos (name, user_id, description) VALUES (?, ?, ?)", [name, session[:user]["id"], description])
+        db.execute("INSERT INTO todos (name, user_id, description, folder_id) VALUES (?, ?, ?, ?)", [name, session[:user]["id"], description, params[:folder_id]])
         redirect '/'
-      end
+      end    
+
+      post '/folders/create' do
+          name = params[:name]
+          db.execute("INSERT INTO folders (name, user_id) VALUES (?, ?)", [name, 1])
+          redirect '/'
+        end
       
     
     post '/todo/:id/delete' do
@@ -112,6 +125,8 @@ class App < Sinatra::Base
     end
     get '/' do
         @folders = db.execute("SELECT * FROM folders")
+        p "Anton är lite homosexuell!!!"
+        p @folders
         @todos = db.execute("SELECT * FROM todos WHERE user_id = ?", [session[:user]["id"]])
         erb :index
      end
