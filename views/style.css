@@ -1,0 +1,58 @@
+/* Grundläggande styling */
+.todo-list {
+    list-style: none;
+    padding: 0;
+}
+
+.todo-list li {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Olika stilar för avklarade och ej avklarade uppgifter */
+.list_completed {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+}
+
+.list_uncompleted {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: #6c757d;
+}
+
+/* Form-styling */
+form {
+    display: inline;
+}
+
+input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Delete-knapp */
+input[value="Delete"] {
+    background-color: #dc3545;
+}
+
+input[value="Delete"]:hover {
+    background-color: #c82333;
+}

@@ -57,11 +57,8 @@ class App < Sinatra::Base
   end
 
     get '/' do
-      p session[:user]["id"]
-
-      @folders = db.execute("SELECT * FROM folders")
-      p "Anton är lite homosexuell!!!"
-      p @folders
+      @folders = db.execute("SELECT * FROM folders WHERE user_id = ?", [session[:user]["id"]])
+      
       @todos = db.execute("SELECT * 
       FROM todos 
         INNER JOIN users ON todos.user_id = users.id
@@ -84,8 +81,11 @@ class App < Sinatra::Base
       
     
     post '/todo/:id/delete' do
+      
+        folder_id = db.execute("SELECT folder_id FROM todos WHERE id = ?", [params[:id]])[0]["folder_id"]
+
         db.execute("DELETE FROM todos WHERE id = ?", [params[:id]])
-        redirect '/'
+        redirect '/folders/' + folder_id.to_s
       end
 
 
@@ -95,7 +95,8 @@ class App < Sinatra::Base
         elsif done == "0"
             db.execute("UPDATE todos SET done = 1 WHERE id = ?", [params[:id]])
         end
-        redirect '/'
+        folder_id = db.execute("SELECT folder_id FROM todos WHERE id = ?", [params[:id]])[0]["folder_id"]
+        redirect '/folders/' + folder_id.to_s
       end
       
         # Route to display all folders
@@ -116,17 +117,8 @@ class App < Sinatra::Base
     redirect '/folders'  # Redirect back to the list of folders
     end
 
-    # Route to display tasks for a specific folder
-    get '/folders/:id' do
-    folder_id = params[:id].to_i
-    @folder = db.execute("SELECT * FROM folders WHERE id = ?", [folder_id]).first
-    @tasks = db.execute("SELECT * FROM todos WHERE folder_id = ?", [folder_id])
-    erb :folder_tasks  # Show the tasks within this folder
-    end
     get '/' do
         @folders = db.execute("SELECT * FROM folders")
-        p "Anton är lite homosexuell!!!"
-        p @folders
         @todos = db.execute("SELECT * FROM todos WHERE user_id = ?", [session[:user]["id"]])
         erb :index
      end
@@ -147,9 +139,20 @@ class App < Sinatra::Base
         redirect '/'  # Redirect back to the homepage after creating the folder
       end
       
+      
       get '/folders/new' do
         erb :new_folder
       end
+
+      get '/folders/:id' do
+        folder_id = params[:id]
+        @folder = db.execute("SELECT * FROM folders WHERE id = ?", [folder_id]).first
+        @todos = db.execute("SELECT * FROM todos WHERE folder_id = ?", [folder_id])
+    
+        erb :show 
+      end
+    
+    
       
      
 

@@ -1,3 +1,36 @@
-<h1> <%= @todos["name"] %> </h1> 
-<p> <%= @todos["description"] %> </p>
-<p> <%= @todos["due_date"] %> </p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekt #2</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+
+<body>
+
+<h1><%= @folder['name'] %></h1>
+
+<ul class="todo-list">
+    <% @todos.each do |todo| %>
+        <li class="<%= todo['done'] == 1 ? 'list_completed' : 'list_uncompleted' %>">
+            <h2 class="<%= todo['done'] == 1 ? 'completed' : '' %>"><%= todo['name'] %></h2> 
+            <p><%= todo['description'] %></p>
+            
+            <form action="/todo/<%= todo['id'] %>/<%= todo['done'] %>" method="post">
+                <input type="submit" value="<%= todo['done'] == 1 ? 'Undo' : 'Done' %>">
+            </form>
+            
+            <form action="/todo/<%= todo['id'] %>/delete" method="post">
+                <input type="submit" value="Delete">
+            </form>
+        </li>
+    <% end %>
+</ul>
+
+</ul>
+
+<a href="/">Tillbaka till huvudsidan</a>
+
+</body>
+</html>

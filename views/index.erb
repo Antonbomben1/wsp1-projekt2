@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projekt #2</title>
-    <link rel="stylesheet" type="text/css" href="/style.css?<%=Time.now.to_i%>">
+    <link rel="stylesheet" type="text/css" href="/style.css">
 </head>
 <body>
 
@@ -22,7 +22,7 @@
     <input type="text" name="description" placeholder="Description" required class="todo-input">
     <select name="folder_id">
     <option value="">No Folder</option>
-    <% db.execute("SELECT * FROM folders").each do |folder| %>
+    <% @folders.each do |folder| %>
         <option value="<%= folder['id'] %>"><%= folder['name'] %></option>
     <% end %>
     </select>
@@ -39,35 +39,11 @@
 
 
 <% @folders.each do |folder| %>
-    <button class="folder-button" data-folder-id="<%= folder['id'] %>"><%= folder['name'] %></button>
+    <button class="folder-button" onclick="window.location.href='/folders/<%= folder['id'] %>'">
+        <%= folder['name'] %>
+    </button>
 <% end %>
 
-<ul>
-    <% @todos.each do |todo| %>
-            <% if todo['done'] == 1%>
-            <li class = "list_completed">
-                <h2 class= "completed"><%= todo['name'] %></h2> 
-                <p> <%= todo['description'] %> </p>
-                <form action="/todo/<%= todo['id'] %>/<%=todo['done']%>" method="post" style="display:inline;">
-                <input type="submit" value="undo">
-            </form>
-            <form action="/todo/<%= todo['id'] %>/delete" method="post" style="display:inline;">
-            <input type="submit" value="Delete">
-            </li>
-            <% else %>
-            <li class = "list_uncompleted">
-                <h2><%= todo['name'] %> </h2>
-                <p> <%= todo['description'] %> </p>
-                <form action="/todo/<%= todo['id'] %>/<%=todo['done']%>" method="post" style="display:inline;">
-                <input type="submit" value="Done">
-            </form>
-            <form action="/todo/<%= todo['id'] %>/delete" method="post" style="display:inline;">
-            <input type="submit" value="Delete">
-            </li>
-            <% end %>
-            </form>
-    <% end %>
-</ul>
   </h1>
 </body>
 </html>
