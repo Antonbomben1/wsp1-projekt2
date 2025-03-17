@@ -34,7 +34,9 @@ class App < Sinatra::Base
 
       user = db.execute("SELECT * FROM users WHERE username = ?", [username]).first
 
-      if user && BCrypt::Password.new(user["password"]) == password
+      if user && BCrypt::Password.new(user["password"]) == password and user["username"] == "admin" 
+        redirect '/admin'
+      elsif user && BCrypt::Password.new(user["password"]) == password
           session[:user] = user
           redirect '/'
       else
@@ -56,15 +58,44 @@ class App < Sinatra::Base
       end
   end
 
-    get '/' do
-      @folders = db.execute("SELECT * FROM folders WHERE user_id = ?", [session[:user]["id"]])
+  get '/' do
+
+    @folders = db.execute("SELECT * FROM folders WHERE user_id = ?", [session[:user]["id"]])
+  
+    # För varje folder, hämta antalet 'done' och 'not_done' todos
+    @folders.each do |folder|
+      folder['todo_count'] = {
+        done: db.execute("SELECT COUNT(*) FROM todos WHERE folder_id = ? AND done = 1", [folder['id']]).first['COUNT(*)'],
+        not_done: db.execute("SELECT COUNT(*) FROM todos WHERE folder_id = ? AND done = 0", [folder['id']]).first['COUNT(*)']
+      }
+    end
+  
+    erb :index
+  end
+
+  get '/admin' do
+    # Hämta alla användare
+    @users = db.execute("SELECT * FROM users")
+  
+    # Hämta alla mappar (folders)
+    @folders = db.execute("SELECT * FROM folders")
+  
+    # För varje mapp, räkna hur många todos som är klara och ej
+    @folders.each do |folder|
+      folder['todo_count'] = {
+        done: db.execute("SELECT COUNT(*) FROM todos WHERE folder_id = ? AND done = 1", [folder['id']]).first['COUNT(*)'],
+        not_done: db.execute("SELECT COUNT(*) FROM todos WHERE folder_id = ? AND done = 0", [folder['id']]).first['COUNT(*)']
+      }
+    end
+  
+    # Hämta alla todos och deras tillhörande användare
+    @todos = db.execute("SELECT todos.*, users.username FROM todos JOIN users ON todos.user_id = users.id")
+  
+    erb :admin_user_todo
+  end
+  
+  
       
-      @todos = db.execute("SELECT * 
-      FROM todos 
-        INNER JOIN users ON todos.user_id = users.id
-        INNER JOIN folders ON todos.folder_id = folders.id")
-      erb :index
-      end
     
       post '/todo' do
         name = params[:name]
@@ -75,7 +106,7 @@ class App < Sinatra::Base
 
       post '/folders/create' do
           name = params[:name]
-          db.execute("INSERT INTO folders (name, user_id) VALUES (?, ?)", [name, 1])
+          db.execute("INSERT INTO folders (name, user_id) VALUES (?, ?)", [name, session[:user]["id"]])
           redirect '/'
         end
       
@@ -151,7 +182,8 @@ class App < Sinatra::Base
     
         erb :show 
       end
-    
+
+      
     
       
      

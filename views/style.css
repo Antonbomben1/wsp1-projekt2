@@ -56,3 +56,53 @@ input[value="Delete"] {
 input[value="Delete"]:hover {
     background-color: #c82333;
 }
+
+/* Stil för folder-knapparna */
+.folder-button {
+    background-color: #007bff;
+    color: white;
+    font-size: 20px;
+    padding: 20px 40px;
+    margin: 10px;
+    border-radius: 10px;
+    border: none;
+    width: 250px;  /* Gör knapparna större */
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+/* Hover-effekt för knappen */
+.folder-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Container runt knapparna för bättre utseende */
+.folder-button-container {
+    display: inline-block;
+    padding: 10px;
+    background-color: #f8f9fa; /* Lätt bakgrundsfärg */
+    border-radius: 15px;
+    margin: 15px; /* Ge utrymme mellan mappar */
+}
+
+/* Information som visas på knappen */
+.folder-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.folder-name {
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.todo-count {
+    font-size: 16px;
+    color: #6c757d;
+}
+

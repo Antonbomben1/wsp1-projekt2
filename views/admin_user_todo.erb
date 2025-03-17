@@ -1,13 +1,54 @@
-<h1><%= @user['username'] %>'s Todos</h1>
-<ul>
-  <% @todos.each do |todo| %>
-    <li>
-      <strong><%= todo['name'] %></strong> - <%= todo['description'] %>
-      <% if todo['done'] == 1 %>
-        <span>(Done)</span>
-      <% end %>
-    </li>
-  <% end %>
-</ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Alla Användare</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+<body>
 
-<a href="/admin/users">Back to User List</a>
+<header>
+    <h1>Admin Panel - Alla Användare</h1>
+    <form action="/logout" method="post" class="logout-form">
+        <button type="submit" class="logout-button">Log Out</button>
+    </form>
+</header>
+
+<% @users.each do |user| %>
+    <section class="user-section">
+        <h2><%= user["username"] %></h2>
+
+        <h3>Folders:</h3>
+        <% user_folders = @folders.select { |folder| folder["user_id"] == user["id"] } %>
+
+        <% if user_folders.empty? %>
+            <p>Inga mappar skapade</p>
+        <% else %>
+            <% user_folders.each do |folder| %>
+                <div class="folder-box">
+                    <h3><%= folder["name"] %></h3>
+                    <p>✅ <%= folder["todo_count"][:done] %> / ❌ <%= folder["todo_count"][:not_done] %></p>
+
+                    <h4>Todos:</h4>
+                    <ul>
+                        <% user_todos = @todos.select { |todo| todo["folder_id"] == folder["id"] } %>
+                        <% if user_todos.empty? %>
+                            <li>Inga uppgifter</li>
+                        <% else %>
+                            <% user_todos.each do |todo| %>
+                                <li>
+                                    <strong><%= todo["name"] %></strong>: <%= todo["description"] %> 
+                                    (<%= todo["done"] == 1 ? "✅ Klar" : "❌ Ej klar" %>)
+                                </li>
+                            <% end %>
+                        <% end %>
+                    </ul>
+                </div>
+            <% end %>
+        <% end %>
+    </section>
+<% end %>
+
+</body>
+</html>
