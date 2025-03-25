@@ -4,6 +4,8 @@ require 'securerandom'
 require 'sqlite3'
 require 'json'
 require './db/seeder'
+require_relative 'models/folder.rb'
+
 class App < Sinatra::Base
  
     def db
@@ -31,19 +33,24 @@ class App < Sinatra::Base
     post '/login' do
       username = params[:username]
       password = params[:password]
-
+    
       user = db.execute("SELECT * FROM users WHERE username = ?", [username]).first
-
-      if user && BCrypt::Password.new(user["password"]) == password and user["username"] == "admin" 
-        redirect '/admin'
-      elsif user && BCrypt::Password.new(user["password"]) == password
-          session[:user] = user
+    
+      if user && BCrypt::Password.new(user["password"]) == password
+        session[:user] = user
+    
+        # Om admin loggar in, skicka till admin-sidan
+        if user["username"] == "admin"
+          redirect '/admin'
+        else
           redirect '/'
+        end
       else
-          @error = "Invalid username or password"
-          erb :login
+        @error = "Invalid username or password"
+        erb :login
       end
-  end
+    end
+    
 
   post '/logout' do
       session.clear
@@ -51,12 +58,22 @@ class App < Sinatra::Base
   end
 
   before do
-      protected_routes = ['/', '/todo', '/todo/:id/delete', '/todo/:id/:done']
-      if protected_routes.include?(request.path_info) && session[:user].nil?
-        p session[:user]  
+    protected_routes = ['/', '/todo', '/todo/:id/delete', '/todo/:id/:done']
+    admin_routes = ['/admin']
+  
+    # Skydda alla användar-routes
+    if protected_routes.include?(request.path_info) && session[:user].nil?
+      redirect '/login'
+    end
+  
+    # Skydda admin-route
+    if admin_routes.include?(request.path_info)
+      if session[:user].nil? || session[:user]['username'] != 'admin'
         redirect '/login'
       end
+    end
   end
+  
 
   get '/' do
 
@@ -72,27 +89,18 @@ class App < Sinatra::Base
   
     erb :index
   end
+  
+
 
   get '/admin' do
-    # Hämta alla användare
+  
+    @folders = Folder.all_with_counts(db)
     @users = db.execute("SELECT * FROM users")
-  
-    # Hämta alla mappar (folders)
-    @folders = db.execute("SELECT * FROM folders")
-  
-    # För varje mapp, räkna hur många todos som är klara och ej
-    @folders.each do |folder|
-      folder['todo_count'] = {
-        done: db.execute("SELECT COUNT(*) FROM todos WHERE folder_id = ? AND done = 1", [folder['id']]).first['COUNT(*)'],
-        not_done: db.execute("SELECT COUNT(*) FROM todos WHERE folder_id = ? AND done = 0", [folder['id']]).first['COUNT(*)']
-      }
-    end
-  
-    # Hämta alla todos och deras tillhörande användare
-    @todos = db.execute("SELECT todos.*, users.username FROM todos JOIN users ON todos.user_id = users.id")
-  
+    @todos = db.execute("SELECT * FROM todos")
+    
     erb :admin_user_todo
   end
+  
   
   
       

@@ -23,7 +23,6 @@ class Seeder
       name TEXT,
       user_id INTEGER NOT NULL,
       description TEXT,
-      due_date DATE,
       folder_id INTEGER,
       done BOOLEAN DEFAULT FALSE,
       FOREIGN KEY (user_id) REFERENCES users(id),
@@ -44,7 +43,6 @@ class Seeder
     db.execute('INSERT INTO users (username, password) VALUES ("u2", ?)', [password_hashed])
 
     # Skapa mappar kopplade till användare
-    db.execute('INSERT INTO folders (name, user_id) VALUES ("Work", 1)')
     db.execute('INSERT INTO folders (name, user_id) VALUES ("Personal", 2)')
     db.execute('INSERT INTO folders (name, user_id) VALUES ("Trip", 3)')
 
